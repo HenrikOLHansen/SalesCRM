@@ -11,11 +11,11 @@ INSERT INTO "COMPANY" (ID, VERSION, NAME) VALUES
 (204, 1, 'Coolshop'),
 (205, 1, 'Ikea'),
 (206, 1, 'Rigspolitiet');
-INSERT INTO "CONTACT" (ID, VERSION, EMAIL,FIRST_NAME,LAST_NAME,COMPANY_ID) VALUES
-(11, 1, 'hans.hansen@rh.dk', 'Hans', 'Hansen', 6),
-(12, 1, 'poul.jensen@merkel.dk', 'Poul', 'Jensen', 7),
-(13, 1, 'per.iversen@rh.dk', 'Per', 'Iversen', 6),
-(14, 1, 'pm@almbrand.dk', 'Pia', 'Mikkelsen', 10);
+INSERT INTO "CONTACT" (ID, VERSION, EMAIL,FIRST_NAME,LAST_NAME,COMPANY_ID, PHONE_NUMBER) VALUES
+(11, 1, 'hans.hansen@rh.dk', 'Hans', 'Hansen', 6, '5353656'),
+(12, 1, 'poul.jensen@merkel.dk', 'Poul', 'Jensen', 7, '3535353'),
+(13, 1, 'per.iversen@rh.dk', 'Per', 'Iversen', 6, '2233445'),
+(14, 1, 'pm@almbrand.dk', 'Pia', 'Mikkelsen', 10, '');
 -- INSERT INTO "CONSID_CONTACT" (ID, VERSION, FIRST_NAME) VALUES
 -- (40, 1, 'Laurids'),
 -- (41, 1, 'Markus'),
@@ -54,3 +54,5 @@ INSERT INTO "COMPLETED_ASSIGNMENT" (ID, VERSION, CONSULTANT, CUSTOMER_CONTACT, A
 (303, 1, 'Henrik Hansen', 'Poul Jensen @Merkel', '', 'Markus', '2017-01-01', '2018-04-30', ''),
 (304, 1, 'Mikkel Olsen', 'Poul Jensen @Merkel', '', 'Laurids', '2022-08-17', '2022-10-12', ''),
 (305, 1, 'Claus Reinhold', 'Pia Mikkelsen @Alm. Brand', '', 'Daniel', '2023-01-20', '2023-07-25', '');
+INSERT INTO "TASK" (ID, VERSION, TASK_CONTACT_ID, LINK, DESCRIPTION, DUE_DATE) VALUES
+(400, 1, 11, 'https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3773696405', 'C# Project', '2023-12-01');

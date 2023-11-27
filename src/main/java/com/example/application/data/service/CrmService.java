@@ -2,12 +2,18 @@ package com.example.application.data.service;
 
 import com.example.application.data.entity.*;
 import com.example.application.data.repository.*;
+import com.vaadin.flow.component.dnd.DropEvent;
+import com.vaadin.flow.component.sidenav.SideNav;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class CrmService {
+
+    private final Logger logger = LoggerFactory.getLogger(CrmService.class);
 
     private final ContactRepository contactRepository;
     private final ConsidContactRepository considContactRepository;
@@ -17,6 +23,7 @@ public class CrmService {
     private final ConsultantRepository consultantRepository;
     private final AssignmentRepository assignmentRepository;
     private final CompletedAssignmentRepository completedAssignmentRepository;
+    private final TaskRepository taskRepository;
 
     public CrmService(ContactRepository contactRepository,
                       ConsidContactRepository considContactRepository,
@@ -25,7 +32,8 @@ public class CrmService {
                       SkillRepository skillRepository,
                       ConsultantRepository consultantRepository,
                       AssignmentRepository assignmentRepository,
-                      CompletedAssignmentRepository completedAssignmentRepository) {
+                      CompletedAssignmentRepository completedAssignmentRepository,
+                      TaskRepository taskRepository) {
         this.contactRepository = contactRepository;
         this.considContactRepository = considContactRepository;
         this.companyRepository = companyRepository;
@@ -34,6 +42,7 @@ public class CrmService {
         this.consultantRepository = consultantRepository;
         this.assignmentRepository = assignmentRepository;
         this.completedAssignmentRepository = completedAssignmentRepository;
+        this.taskRepository = taskRepository;
     }
 
     public List<Contact> findAllContacts(String stringFilter) {
@@ -108,6 +117,10 @@ public class CrmService {
         assignmentRepository.delete(assignment);
     }
 
+    public void saveTask(Task task) {
+        taskRepository.save(task);
+    }
+
     public void deleteLead(Lead lead) {
         leadRepository.delete(lead);
     }
@@ -121,6 +134,8 @@ public class CrmService {
     public List<Consultant> findAllConsultants() { return consultantRepository.findAll(); }
 
     public List<Assignment> findAllAssignments() { return assignmentRepository.findAll(); }
+
+    public List<Task> findAllTasks() { return taskRepository.findAllByOrderByDueDateDesc(); }
 
     public void saveCompany(Company company) {
         companyRepository.save(company);

@@ -24,6 +24,7 @@ public class ContactForm extends FormLayout {
     TextField firstName = new TextField("First name");
     TextField lastName = new TextField("Last name");
     EmailField email = new EmailField("Email");
+    TextField phoneNumber = new TextField("Phone Number");
     ComboBox<Company> company = new ComboBox<>("Company");
 
     Button saveButton = new Button("Save");
@@ -39,6 +40,7 @@ public class ContactForm extends FormLayout {
         add(firstName,
                 lastName,
                 email,
+                phoneNumber,
                 company,
                 createButtonsLayout());
     }

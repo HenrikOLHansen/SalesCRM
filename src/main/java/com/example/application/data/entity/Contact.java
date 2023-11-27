@@ -17,6 +17,8 @@ public class Contact extends AbstractEntity {
     @NotEmpty
     private String lastName = "";
 
+    private String phoneNumber = "";
+
     @ManyToOne
     @JoinColumn(name = "company_id")
     @NotNull
@@ -29,7 +31,7 @@ public class Contact extends AbstractEntity {
 
     @Override
     public String toString() {
-        return firstName + " " + lastName + " @" + company.getName();
+        return firstName + " " + lastName + " @" + company.getName() + ", phone: " + phoneNumber;
     }
 
     public String getFirstName() {
@@ -63,4 +65,8 @@ public class Contact extends AbstractEntity {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getPhoneNumber() { return phoneNumber; }
+
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 }
