@@ -2,8 +2,6 @@ package com.example.application.data.service;
 
 import com.example.application.data.entity.*;
 import com.example.application.data.repository.*;
-import com.vaadin.flow.component.dnd.DropEvent;
-import com.vaadin.flow.component.sidenav.SideNav;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
