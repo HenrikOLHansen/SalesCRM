@@ -22,6 +22,7 @@ public class CrmService {
     private final AssignmentRepository assignmentRepository;
     private final CompletedAssignmentRepository completedAssignmentRepository;
     private final TaskRepository taskRepository;
+    private final CompletedTaskRepository completedTaskRepository;
 
     public CrmService(ContactRepository contactRepository,
                       ConsidContactRepository considContactRepository,
@@ -31,7 +32,8 @@ public class CrmService {
                       ConsultantRepository consultantRepository,
                       AssignmentRepository assignmentRepository,
                       CompletedAssignmentRepository completedAssignmentRepository,
-                      TaskRepository taskRepository) {
+                      TaskRepository taskRepository,
+                      CompletedTaskRepository completedTaskRepository) {
         this.contactRepository = contactRepository;
         this.considContactRepository = considContactRepository;
         this.companyRepository = companyRepository;
@@ -41,6 +43,7 @@ public class CrmService {
         this.assignmentRepository = assignmentRepository;
         this.completedAssignmentRepository = completedAssignmentRepository;
         this.taskRepository = taskRepository;
+        this.completedTaskRepository = completedTaskRepository;
     }
 
     public List<Contact> findAllContacts(String stringFilter) {
@@ -115,9 +118,17 @@ public class CrmService {
         assignmentRepository.delete(assignment);
     }
 
+    public void archiveTask(Task task, String notes) {
+        CompletedTask completedTask = new CompletedTask(task, notes);
+        completedTaskRepository.save(completedTask);
+        taskRepository.delete(task);
+    }
+
     public void saveTask(Task task) {
         taskRepository.save(task);
     }
+
+    public void deleteTask(Task task) { taskRepository.delete(task); }
 
     public void deleteLead(Lead lead) {
         leadRepository.delete(lead);
@@ -133,7 +144,11 @@ public class CrmService {
 
     public List<Assignment> findAllAssignments() { return assignmentRepository.findAll(); }
 
-    public List<Task> findAllTasks() { return taskRepository.findAllByOrderByDueDateDesc(); }
+    public List<Task> findAllTasks() { return taskRepository.findAllByOrderByDueDateAsc(); }
+
+    public List<CompletedTask> findAllCompletedTasks() { return completedTaskRepository.findAll(); }
+
+    public List<Task> findLastFiveTasks() { return findAllTasks().stream().limit(5).toList(); }
 
     public void saveCompany(Company company) {
         companyRepository.save(company);

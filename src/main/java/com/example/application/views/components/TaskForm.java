@@ -43,6 +43,8 @@ public class TaskForm extends FormLayout {
         contact.setItemLabelGenerator(Contact::toString);
         dueDate.setValue(LocalDate.now());
 
+        setColspan(link, 2);
+
         description.setPlaceholder("Enter description here...");
         description.setMaxLength(DESC_MAX_LENGTH);
         description.setValueChangeMode(ValueChangeMode.EAGER);
@@ -90,11 +92,19 @@ public class TaskForm extends FormLayout {
         binder.setBean(task);
     }
 
+    public void prepareForm(Task task) {
+        contact.setItems(task.getContact());
+        contact.setValue(task.getContact());
+        contact.setReadOnly(true);
+        binder.setBean(task);
+    }
+
     public void prepareForm(List<Contact> contacts, Contact selectedContact) {
         Task task = new Task();
         task.setDueDate(LocalDate.now());
         contact.setItems(contacts);
         contact.setValue(selectedContact);
+        contact.setReadOnly(false);
 
         binder.setBean(task);
     }

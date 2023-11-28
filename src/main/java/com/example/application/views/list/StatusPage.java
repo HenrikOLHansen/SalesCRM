@@ -2,6 +2,7 @@ package com.example.application.views.list;
 
 import com.example.application.data.entity.Assignment;
 import com.example.application.data.entity.Consultant;
+import com.example.application.data.entity.Task;
 import com.example.application.data.service.CrmService;
 import com.example.application.views.MainLayout;
 import com.github.appreciated.apexcharts.ApexCharts;
@@ -20,6 +21,7 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
@@ -32,6 +34,7 @@ public class StatusPage extends VerticalLayout {
 
     private final CrmService crmService;
     Grid<Assignment> closingAssignments = new Grid<>(Assignment.class, false);
+    TaskList taskList;
 
     public StatusPage(CrmService crmService) {
         this.crmService = crmService;
@@ -40,13 +43,13 @@ public class StatusPage extends VerticalLayout {
         header.addClassNames(LumoUtility.Margin.Top.XLARGE, LumoUtility.Margin.Bottom.MEDIUM);
         add(header);
 
-        H5 occupancyHeader = new H5("Consultant Occupancy");
-        add(occupancyHeader);
-
         setSizeFull();
 
-        ApexCharts chart = configureOccupancyChart();
-        add(chart);
+        SplitLayout topLayout = new SplitLayout(configureOccupancyChart(), configureTaskList());
+        topLayout.setSizeFull();
+        topLayout.setSplitterPosition(40);
+
+        add(topLayout);
 
         add(new Hr());
 
@@ -58,7 +61,24 @@ public class StatusPage extends VerticalLayout {
         updateContent();
     }
 
-    private ApexCharts configureOccupancyChart() {
+    private VerticalLayout configureTaskList() {
+        H5 header = new H5("Current Tasks");
+
+        Grid<Task> grid = new Grid<>(Task.class, false);
+        grid.setSizeFull();
+        grid.addColumn(task -> task.getContact().toString()).setHeader("Contact");
+        grid.addColumn(Task::getDueDate).setHeader("Due Date");
+        grid.addColumn(Task::getDescription).setHeader("Description");
+        grid.getColumns().forEach(col -> col.setAutoWidth(true));
+
+        grid.setItems(crmService.findLastFiveTasks());
+
+        return new VerticalLayout(header, grid);
+    }
+
+    private VerticalLayout configureOccupancyChart() {
+        H5 header = new H5("Consultant Occupancy");
+
         List<Consultant> allConsultants = crmService.findAllConsultants();
 
         int totalNumberOfConsultants = allConsultants.size();
@@ -88,7 +108,7 @@ public class StatusPage extends VerticalLayout {
                 .build();
         chart.setTheme(ThemeBuilder.get().withMode(Mode.DARK).build());
 
-        return chart;
+        return new VerticalLayout(header, chart);
     }
 
     private void configureClosingAssignments() {

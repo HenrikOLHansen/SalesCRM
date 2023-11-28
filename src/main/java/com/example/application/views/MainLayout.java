@@ -74,7 +74,8 @@ public class MainLayout extends AppLayout {
         SideNav archiveNav = new SideNav("Archive");
         archiveNav.setCollapsible(true);
         archiveNav.setExpanded(false);
-        archiveNav.addItem(new SideNavItem("Completed Assignments", CompletedAssignmentList.class, VaadinIcon.ARCHIVE.create()));
+        archiveNav.addItem(new SideNavItem("Completed Assignments", CompletedAssignmentList.class, VaadinIcon.CLIPBOARD_USER.create()));
+        archiveNav.addItem(new SideNavItem("Completed Tasks", CompletedTaskList.class, VaadinIcon.TASKS.create()));
 
         VerticalLayout navWrapper = new VerticalLayout(topNav, dataNav, taskNav, archiveNav);
         navWrapper.setSpacing(true);
