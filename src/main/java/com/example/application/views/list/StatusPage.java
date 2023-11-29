@@ -20,6 +20,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -121,9 +122,18 @@ public class StatusPage extends VerticalLayout {
         closingAssignments.setSizeFull();
         closingAssignments.addColumn(assignment -> assignment.getConsultant().toString()).setHeader("Consultant");
         closingAssignments.addColumn(assignment -> assignment.getCustomerContact().toString()).setHeader("Contact: Customer");
-        closingAssignments.addColumn(assignment -> daysUntilAssignmentEnds(now, assignment)).setHeader("Days Until End");
+        closingAssignments.addComponentColumn(assignment -> assignmentDaysStatus(now, assignment)).setHeader("Days Until End");
         closingAssignments.addColumn(Assignment::getStartDate).setHeader("Start Date");
         closingAssignments.addColumn(Assignment::getEndDate).setHeader("End Date");
+    }
+
+    private Span assignmentDaysStatus(LocalDate now, Assignment assignment) {
+        int daysUntilAssignmentEnds = daysUntilAssignmentEnds(now, assignment);
+        String theme = daysUntilAssignmentEnds > 15 ? "badge" : "badge error";
+        String status = daysUntilAssignmentEnds + " days";
+        Span span = new Span(status);
+        span.getElement().getThemeList().add(theme);
+        return span;
     }
 
     private void updateContent() {

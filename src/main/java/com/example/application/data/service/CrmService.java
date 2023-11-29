@@ -2,6 +2,7 @@ package com.example.application.data.service;
 
 import com.example.application.data.entity.*;
 import com.example.application.data.repository.*;
+import com.example.application.security.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class CrmService {
     private final CompletedAssignmentRepository completedAssignmentRepository;
     private final TaskRepository taskRepository;
     private final CompletedTaskRepository completedTaskRepository;
+    private final SecurityService securityService;
 
     public CrmService(ContactRepository contactRepository,
                       ConsidContactRepository considContactRepository,
@@ -33,7 +35,8 @@ public class CrmService {
                       AssignmentRepository assignmentRepository,
                       CompletedAssignmentRepository completedAssignmentRepository,
                       TaskRepository taskRepository,
-                      CompletedTaskRepository completedTaskRepository) {
+                      CompletedTaskRepository completedTaskRepository,
+                      SecurityService securityService) {
         this.contactRepository = contactRepository;
         this.considContactRepository = considContactRepository;
         this.companyRepository = companyRepository;
@@ -44,6 +47,7 @@ public class CrmService {
         this.completedAssignmentRepository = completedAssignmentRepository;
         this.taskRepository = taskRepository;
         this.completedTaskRepository = completedTaskRepository;
+        this.securityService = securityService;
     }
 
     public List<Contact> findAllContacts(String stringFilter) {
@@ -143,9 +147,13 @@ public class CrmService {
 
     public List<Assignment> findAllAssignments() { return assignmentRepository.findAll(); }
 
-    public List<Task> findAllTasks() { return taskRepository.findAllByOrderByDueDateAsc(); }
+    public List<Task> findAllTasks() {
+        return taskRepository.findAllByUsernameOrderByDueDateAsc(getCurrentLoggedInUsername());
+    }
 
-    public List<CompletedTask> findAllCompletedTasks() { return completedTaskRepository.findAll(); }
+    public List<CompletedTask> findAllCompletedTasks() {
+        return completedTaskRepository.findAllByUsernameOrderByCompletionDateAsc(getCurrentLoggedInUsername());
+    }
 
     public List<Task> findLastFiveTasks() { return findAllTasks().stream().limit(5).toList(); }
 
@@ -163,5 +171,9 @@ public class CrmService {
 
     public List<CompletedAssignment> findAllCompletedAssignments() {
         return completedAssignmentRepository.findAllByOrderByEndDateDesc();
+    }
+
+    private String getCurrentLoggedInUsername() {
+        return securityService.getAuthenticatedUser().getUsername();
     }
 }

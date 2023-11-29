@@ -1,6 +1,7 @@
 package com.example.application.views;
 
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -24,7 +25,10 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
         login.setAction("login");
 
-        add(new H1("Consid Sales CRM"), login);
+        Image considLogo = new Image("images/consid-logo-nocolor.png", "Consid Logo");
+        considLogo.setMaxHeight("50px");
+
+        add(considLogo, new H1("Sales CRM"), login);
     }
 
     @Override

@@ -22,6 +22,7 @@ public class CompletedTask extends AbstractTask {
         setDescription(task.getDescription());
         setLink(task.getLink());
         setDueDate(task.getDueDate());
+        setUsername(task.getUsername());
     }
 
     public String getNotes() {

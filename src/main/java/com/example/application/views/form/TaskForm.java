@@ -18,6 +18,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.shared.Registration;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -73,8 +74,9 @@ public class TaskForm extends FormLayout {
         return new HorizontalLayout(saveButton, cancelButton);
     }
 
-    public void prepareForm(Contact selectedContact) {
+    public void prepareForm(Contact selectedContact, UserDetails currentUser) {
         Task task = new Task();
+        task.setUsername(currentUser.getUsername());
         task.setDueDate(LocalDate.now());
         task.setContact(selectedContact);
         contact.setItems(selectedContact);

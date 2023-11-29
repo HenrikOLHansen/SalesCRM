@@ -54,5 +54,5 @@ INSERT INTO "COMPLETED_ASSIGNMENT" (ID, VERSION, CONSULTANT, CUSTOMER_CONTACT, A
 (303, 1, 'Henrik Hansen', 'Poul Jensen @Merkel', '', 'Markus', '2017-01-01', '2018-04-30', ''),
 (304, 1, 'Mikkel Olsen', 'Poul Jensen @Merkel', '', 'Laurids', '2022-08-17', '2022-10-12', ''),
 (305, 1, 'Claus Reinhold', 'Pia Mikkelsen @Alm. Brand', '', 'Daniel', '2023-01-20', '2023-07-25', '');
-INSERT INTO "TASK" (ID, VERSION, TASK_CONTACT_ID, LINK, DESCRIPTION, DUE_DATE) VALUES
-(400, 1, 11, 'https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3773696405', 'C# Project', '2023-12-01');
+INSERT INTO "TASK" (ID, VERSION, TASK_CONTACT_ID, LINK, DESCRIPTION, DUE_DATE, USERNAME) VALUES
+(400, 1, 11, 'https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3773696405', 'C# Project', '2023-12-01', 'alice');

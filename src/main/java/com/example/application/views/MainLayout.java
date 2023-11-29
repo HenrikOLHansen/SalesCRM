@@ -101,7 +101,7 @@ public class MainLayout extends AppLayout {
         dropEvent.getDragData().ifPresent(data -> {
             Object payload = ((Collection) data).iterator().next();
             if(payload instanceof Contact selectedContact) {
-                taskForm.prepareForm(selectedContact);
+                taskForm.prepareForm(selectedContact, securityService.getAuthenticatedUser());
 
                 taskDialog.open();
             }
