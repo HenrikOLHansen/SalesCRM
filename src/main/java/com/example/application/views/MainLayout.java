@@ -12,6 +12,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.dnd.DropEvent;
 import com.vaadin.flow.component.dnd.DropTarget;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -39,16 +40,20 @@ public class MainLayout extends AppLayout {
     }
 
     private void createDrawer() {
-        H1 logo = new H1("Sales CRM");
-        logo.addClassNames(
+
+        Image considLogo = new Image("images/consid-logo-nocolor.png", "Consid Logo");
+        considLogo.setMaxHeight("50px");
+
+        H1 logoText = new H1("Sales CRM");
+        logoText.addClassNames(
                 LumoUtility.FontSize.LARGE,
                 LumoUtility.Margin.MEDIUM);
 
         String username = securityService.getAuthenticatedUser().getUsername();
         Button logoutButton = new Button("Log out " + username, e -> securityService.logout());
 
-        var header = new HorizontalLayout(new DrawerToggle(), logo, logoutButton);
-        header.expand(logo);
+        var header = new HorizontalLayout(new DrawerToggle(), considLogo, logoText, logoutButton);
+        header.expand(logoText);
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.setWidthFull();
         header.addClassNames(
