@@ -2,7 +2,7 @@ package com.example.application.views;
 
 import com.example.application.data.entity.Contact;
 import com.example.application.data.service.CrmService;
-import com.example.application.views.components.TaskForm;
+import com.example.application.views.form.TaskForm;
 import com.example.application.views.list.*;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;

@@ -39,8 +39,6 @@ public class CompletedAssignmentList extends VerticalLayout {
 
         add(grid);
 
-        // TODO setupDialog();
-
         configureGrid();
         updateGridContent();
     }

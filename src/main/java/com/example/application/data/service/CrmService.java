@@ -118,8 +118,7 @@ public class CrmService {
         assignmentRepository.delete(assignment);
     }
 
-    public void archiveTask(Task task, String notes) {
-        CompletedTask completedTask = new CompletedTask(task, notes);
+    public void archiveTask(CompletedTask completedTask, Task task) {
         completedTaskRepository.save(completedTask);
         taskRepository.delete(task);
     }

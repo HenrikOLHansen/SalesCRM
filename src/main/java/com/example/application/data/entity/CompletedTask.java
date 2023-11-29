@@ -15,9 +15,8 @@ public class CompletedTask extends AbstractTask {
 
     public CompletedTask() { super(); }
 
-    public CompletedTask(Task task, String notes) {
+    public CompletedTask(Task task) {
         this.completionDate = LocalDate.now();
-        this.notes = notes;
 
         setContact(task.getContact());
         setDescription(task.getDescription());

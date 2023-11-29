@@ -129,9 +129,6 @@ public class StatusPage extends VerticalLayout {
                 .toList();
 
         closingAssignments.setItems(endingAssignments);
-
-        // TODO reset series content on chart
-
     }
 
     private int daysUntilAssignmentEnds(LocalDate now, Assignment assignment) {

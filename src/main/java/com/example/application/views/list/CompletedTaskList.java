@@ -39,8 +39,6 @@ public class CompletedTaskList extends VerticalLayout {
 
         add(grid);
 
-        // TODO setupDialog();
-
         configureGrid();
         updateGridContent();
     }

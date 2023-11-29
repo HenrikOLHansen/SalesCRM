@@ -3,7 +3,8 @@ package com.example.application.views.list;
 import com.example.application.data.entity.Task;
 import com.example.application.data.service.CrmService;
 import com.example.application.views.MainLayout;
-import com.example.application.views.components.TaskForm;
+import com.example.application.views.form.CompleteTaskForm;
+import com.example.application.views.form.TaskForm;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -31,6 +32,8 @@ public class TaskList extends VerticalLayout {
     Grid<Task> grid = new Grid<>(Task.class, false);
     TaskForm taskForm;
     Dialog taskDialog = new Dialog();
+    CompleteTaskForm completeTaskForm;
+    Dialog completeTaskDialog = new Dialog();
 
     private final CrmService crmService;
 
@@ -47,18 +50,33 @@ public class TaskList extends VerticalLayout {
 
         add(createToolbar(), grid);
 
-        setupDialog();
+        setupDialogs();
 
         configureGrid();
         updateGridContent();
     }
 
-    private void setupDialog() {
+    private void setupDialogs() {
         taskForm = new TaskForm();
         taskForm.addSaveListener(this::saveTask);
         taskForm.addCloseListener(e -> taskDialog.close());
-
         taskDialog.add(taskForm);
+
+        completeTaskForm = new CompleteTaskForm();
+        completeTaskForm.addSaveListener(this::saveCompletedTask);
+        completeTaskForm.addCloseListener(e -> completeTaskDialog.close());
+        completeTaskDialog.add(completeTaskForm);
+    }
+
+    private void saveCompletedTask(CompleteTaskForm.SaveEvent saveEvent) {
+        crmService.archiveTask(saveEvent.getCompletedTask(), saveEvent.getExistingTask());
+
+        completeTaskDialog.close();
+
+        Notification.show("Task completed and archived...", 3000, Notification.Position.TOP_CENTER)
+                .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+
+        updateGridContent();
     }
 
     private void saveTask(TaskForm.SaveEvent saveEvent) {
@@ -89,15 +107,8 @@ public class TaskList extends VerticalLayout {
     }
 
     private void completeTask(Task task) {
-
-        String notes = "";
-        // TODO get notes from dialog?
-
-        crmService.archiveTask(task, notes);
-        Notification.show("Task completed and archived...", 3000, Notification.Position.TOP_CENTER)
-                .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-
-        updateGridContent();
+        completeTaskForm.prepareForm(task);
+        completeTaskDialog.open();
     }
 
     private static ValueProvider<Task, Anchor> createLink() {

@@ -1,4 +1,4 @@
-package com.example.application.views.components;
+package com.example.application.views.form;
 
 import com.example.application.data.entity.Contact;
 import com.example.application.data.entity.Task;
