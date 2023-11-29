@@ -19,10 +19,12 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import jakarta.annotation.security.PermitAll;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@PermitAll
 @PageTitle("Consultants | Sales CRM")
 @Route(value = "consultants", layout = MainLayout.class)
 public class ConsultantList extends VerticalLayout {

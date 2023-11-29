@@ -2,10 +2,12 @@ package com.example.application.views;
 
 import com.example.application.data.entity.Contact;
 import com.example.application.data.service.CrmService;
+import com.example.application.security.SecurityService;
 import com.example.application.views.form.TaskForm;
 import com.example.application.views.list.*;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.dnd.DropEvent;
 import com.vaadin.flow.component.dnd.DropTarget;
@@ -24,12 +26,14 @@ import java.util.Collection;
 
 public class MainLayout extends AppLayout {
 
+    private final SecurityService securityService;
     private final CrmService crmService;
 
     TaskForm taskForm;
     Dialog taskDialog = new Dialog();
 
-    public MainLayout(CrmService crmService) {
+    public MainLayout(SecurityService securityService, CrmService crmService) {
+        this.securityService = securityService;
         this.crmService = crmService;
         createDrawer();
     }
@@ -40,7 +44,11 @@ public class MainLayout extends AppLayout {
                 LumoUtility.FontSize.LARGE,
                 LumoUtility.Margin.MEDIUM);
 
-        var header = new HorizontalLayout(new DrawerToggle(), logo);
+        String username = securityService.getAuthenticatedUser().getUsername();
+        Button logoutButton = new Button("Log out " + username, e -> securityService.logout());
+
+        var header = new HorizontalLayout(new DrawerToggle(), logo, logoutButton);
+        header.expand(logo);
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.setWidthFull();
         header.addClassNames(

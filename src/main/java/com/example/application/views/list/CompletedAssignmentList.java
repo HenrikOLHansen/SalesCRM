@@ -15,9 +15,11 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import jakarta.annotation.security.PermitAll;
 
 import java.util.stream.Stream;
 
+@PermitAll
 @PageTitle("Completed Assignments | Sales CRM")
 @Route(value = "completedAssignments", layout = MainLayout.class)
 public class CompletedAssignmentList extends VerticalLayout {

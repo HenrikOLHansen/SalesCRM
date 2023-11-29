@@ -24,7 +24,9 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import io.micrometer.common.util.StringUtils;
+import jakarta.annotation.security.PermitAll;
 
+@PermitAll
 @PageTitle("Task List | Sales CRM")
 @Route(value = "tasklist", layout = MainLayout.class)
 public class TaskList extends VerticalLayout {

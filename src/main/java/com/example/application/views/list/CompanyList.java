@@ -15,7 +15,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import jakarta.annotation.security.PermitAll;
 
+@PermitAll
 @PageTitle("Companies | Sales CRM")
 @Route(value = "companies", layout = MainLayout.class)
 public class CompanyList extends VerticalLayout {
