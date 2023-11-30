@@ -33,7 +33,7 @@ public class SecurityConfig extends VaadinWebSecurity {
                 .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
                 .roles("USER", "ADMIN")
                 .build();
-        return new InMemoryUserDetailsManager(admin, createBasicUser("bob"), createBasicUser("alice"));
+        return new InMemoryUserDetailsManager(admin, createBasicUser("daniel"), createBasicUser("laurids"), createBasicUser("markus"));
     }
 
     private UserDetails createBasicUser(String username) {

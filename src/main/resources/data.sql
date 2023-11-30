@@ -55,4 +55,5 @@ INSERT INTO "COMPLETED_ASSIGNMENT" (ID, VERSION, CONSULTANT, CUSTOMER_CONTACT, A
 (304, 1, 'Mikkel Olsen', 'Poul Jensen @Merkel', '', 'Laurids', '2022-08-17', '2022-10-12', ''),
 (305, 1, 'Claus Reinhold', 'Pia Mikkelsen @Alm. Brand', '', 'Daniel', '2023-01-20', '2023-07-25', '');
 INSERT INTO "TASK" (ID, VERSION, TASK_CONTACT_ID, LINK, DESCRIPTION, DUE_DATE, USERNAME) VALUES
-(400, 1, 11, 'https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3773696405', 'C# Project', '2023-12-01', 'alice');
+(400, 1, 11, 'https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3773696405', 'C# Project', '2023-12-01', 'daniel'),
+(401, 1, 13, 'https://www.linkedin.com/jobs/view/3737405768/?alternateChannel=search&refId=kJ9G6Hld0CaMiRz3uur9jA%3D%3D&trackingId=FeyENqIJVtxTY1QL5UcF7g%3D%3D', 'Salesforce Opportunity with Nordea', '2024-01-05', 'laurids');
