@@ -2,10 +2,12 @@ package com.example.application.data.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.time.LocalDate;
 
 @Entity
+@Data
 public class Assignment extends AbstractEntity {
 
     @ManyToOne
@@ -47,56 +49,4 @@ public class Assignment extends AbstractEntity {
         this.endDate = lead.getEndDate();
         this.description = lead.getDescription();
     }
-
-    public Consultant getConsultant() {
-        return consultant;
-    }
-
-    public void setConsultant(Consultant consultant) {
-        this.consultant = consultant;
-    }
-
-    public Contact getCustomerContact() {
-        return customerContact;
-    }
-
-    public void setCustomerContact(Contact customerContact) {
-        this.customerContact = customerContact;
-    }
-
-    public ConsidContact getConsidContact() {
-        return considContact;
-    }
-
-    public void setConsidContact(ConsidContact considContact) {
-        this.considContact = considContact;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Contact getAdditionalContact() { return additionalContact; }
-
-    public void setAdditionalContact(Contact additionalContact) { this.additionalContact = additionalContact; }
 }

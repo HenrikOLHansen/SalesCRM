@@ -3,8 +3,10 @@ package com.example.application.data.entity;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.ToString;
 
 @Entity
+@ToString
 public class Skill extends AbstractEntity {
 
     @NotEmpty
@@ -17,10 +19,5 @@ public class Skill extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 }

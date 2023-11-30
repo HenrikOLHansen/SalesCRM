@@ -34,7 +34,7 @@ public class Application implements AppShellConfigurator {
     }
 
     @Bean
-    CommandLineRunner config(CRMConfig config, CrmService crmService) {
+    CommandLineRunner config(final CRMConfig config, final CrmService crmService) {
         return args -> {
             logger.info("Loading configuration properties...");
             logger.info("Found {} Consid contact names", config.getContacts().size());

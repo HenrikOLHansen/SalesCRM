@@ -1,0 +1,17 @@
+{
+  "frontendFolder": "/home/jd/IdeaProjects/SalesCRM/./frontend",
+  "themeFolder": "themes",
+  "themeResourceFolder": "/home/jd/IdeaProjects/SalesCRM/./frontend/generated/jar-resources",
+  "staticOutput": "/home/jd/IdeaProjects/SalesCRM/target/classes/META-INF/VAADIN/webapp/VAADIN/static",
+  "generatedFolder": "generated",
+  "statsOutput": "/home/jd/IdeaProjects/SalesCRM/target/classes/META-INF/VAADIN/config",
+  "frontendBundleOutput": "/home/jd/IdeaProjects/SalesCRM/target/classes/META-INF/VAADIN/webapp",
+  "devBundleOutput": "/home/jd/IdeaProjects/SalesCRM/src/main/dev-bundle/webapp",
+  "devBundleStatsOutput": "/home/jd/IdeaProjects/SalesCRM/src/main/dev-bundle/config",
+  "jarResourcesFolder": "/home/jd/IdeaProjects/SalesCRM/./frontend/generated/jar-resources",
+  "themeName": "salescrm",
+  "clientServiceWorkerSource": "/home/jd/IdeaProjects/SalesCRM/target/sw.ts",
+  "pwaEnabled": false,
+  "offlineEnabled": false,
+  "offlinePath": "'offline.html'"
+}

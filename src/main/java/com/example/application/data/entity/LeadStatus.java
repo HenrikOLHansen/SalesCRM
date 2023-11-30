@@ -7,7 +7,7 @@ public enum LeadStatus {
 
     private final String statusString;
 
-    LeadStatus(String statusString) {
+    LeadStatus(final String statusString) {
         this.statusString = statusString;
     }
 

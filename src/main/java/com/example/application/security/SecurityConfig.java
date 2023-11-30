@@ -15,7 +15,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity 
 @Configuration
-public class SecurityConfig extends VaadinWebSecurity { 
+public class SecurityConfig extends VaadinWebSecurity {
+
+    private static final String PASSWORD = "{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -30,7 +32,7 @@ public class SecurityConfig extends VaadinWebSecurity {
     public UserDetailsService users() {
         UserDetails admin = User.builder()
                 .username("admin")
-                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
+                .password(PASSWORD)
                 .roles("USER", "ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(admin, createBasicUser("daniel"), createBasicUser("laurids"), createBasicUser("markus"));
@@ -40,7 +42,7 @@ public class SecurityConfig extends VaadinWebSecurity {
         return User.builder()
                 .username(username)
                 // password = password with this hash, don't tell anybody :-)
-                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
+                .password(PASSWORD)
                 .roles("USER")
                 .build();
     }

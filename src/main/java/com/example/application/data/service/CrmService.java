@@ -3,6 +3,8 @@ package com.example.application.data.service;
 import com.example.application.data.entity.*;
 import com.example.application.data.repository.*;
 import com.example.application.security.SecurityService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -10,9 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class CrmService {
-
-    private final Logger logger = LoggerFactory.getLogger(CrmService.class);
 
     private final ContactRepository contactRepository;
     private final ConsidContactRepository considContactRepository;
@@ -26,31 +28,8 @@ public class CrmService {
     private final CompletedTaskRepository completedTaskRepository;
     private final SecurityService securityService;
 
-    public CrmService(ContactRepository contactRepository,
-                      ConsidContactRepository considContactRepository,
-                      CompanyRepository companyRepository,
-                      LeadRepository leadRepository,
-                      SkillRepository skillRepository,
-                      ConsultantRepository consultantRepository,
-                      AssignmentRepository assignmentRepository,
-                      CompletedAssignmentRepository completedAssignmentRepository,
-                      TaskRepository taskRepository,
-                      CompletedTaskRepository completedTaskRepository,
-                      SecurityService securityService) {
-        this.contactRepository = contactRepository;
-        this.considContactRepository = considContactRepository;
-        this.companyRepository = companyRepository;
-        this.leadRepository = leadRepository;
-        this.skillRepository = skillRepository;
-        this.consultantRepository = consultantRepository;
-        this.assignmentRepository = assignmentRepository;
-        this.completedAssignmentRepository = completedAssignmentRepository;
-        this.taskRepository = taskRepository;
-        this.completedTaskRepository = completedTaskRepository;
-        this.securityService = securityService;
-    }
 
-    public List<Contact> findAllContacts(String stringFilter) {
+    public List<Contact> findAllContacts(final String stringFilter) {
         if (stringFilter == null || stringFilter.isEmpty()) {
             return contactRepository.findAll();
         } else {
@@ -58,7 +37,7 @@ public class CrmService {
         }
     }
 
-    public List<Consultant> findConsultantsBySkill(String skillFilter) {
+    public List<Consultant> findConsultantsBySkill(final String skillFilter) {
         if(skillFilter == null || skillFilter.isEmpty()) {
             return consultantRepository.findAll();
         } else {
@@ -76,17 +55,17 @@ public class CrmService {
         contactRepository.delete(contact);
     }
 
-    public void saveContact(Contact contact) {
+    public void saveContact(final Contact contact) {
         if (contact == null) {
-            System.err.println("Contact is null. Are you sure you have connected your form to the application?");
+            log.error("Contact is null. Are you sure you have connected your form to the application?");
             return;
         }
         contactRepository.save(contact);
     }
 
-    public void saveSkill(Skill skill) {
+    public void saveSkill(final Skill skill) {
         if (skill == null) {
-            System.err.println("Skill is null. Are you sure you have connected your form to the application?");
+            log.error("Skill is null. Are you sure you have connected your form to the application?");
             return;
         }
         skillRepository.save(skill);
@@ -94,7 +73,7 @@ public class CrmService {
 
     public void saveConsultant(Consultant consultant) {
         if(consultant == null) {
-            System.err.println("Consultant is null. Are you sure you have connected your form to the application?");
+            log.error("Consultant is null. Are you sure you have connected your form to the application?");
             return;
         }
         consultantRepository.save(consultant);
@@ -102,7 +81,7 @@ public class CrmService {
 
     public void saveLead(Lead lead) {
         if(lead == null) {
-            System.err.println("Lead is null. Are you sure you have connected your form to the application?");
+            log.error("Lead is null. Are you sure you have connected your form to the application?");
             return;
         }
         leadRepository.save(lead);
@@ -110,7 +89,7 @@ public class CrmService {
 
     public void saveAssignment(Assignment assignment) {
         if(assignment == null) {
-            System.err.println("Assignment is null. Are you sure you have connected your form to the application?");
+            log.error("Assignment is null. Are you sure you have connected your form to the application?");
             return;
         }
         assignmentRepository.save(assignment);
