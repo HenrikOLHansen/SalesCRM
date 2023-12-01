@@ -7,15 +7,14 @@ import com.example.application.data.service.CrmService;
 import com.example.application.views.MainLayout;
 import com.github.appreciated.apexcharts.ApexCharts;
 import com.github.appreciated.apexcharts.ApexChartsBuilder;
-import com.github.appreciated.apexcharts.config.XAxis;
 import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
-import com.github.appreciated.apexcharts.config.builder.PlotOptionsBuilder;
+import com.github.appreciated.apexcharts.config.builder.LegendBuilder;
+import com.github.appreciated.apexcharts.config.builder.ResponsiveBuilder;
 import com.github.appreciated.apexcharts.config.builder.ThemeBuilder;
-import com.github.appreciated.apexcharts.config.builder.XAxisBuilder;
 import com.github.appreciated.apexcharts.config.chart.Type;
-import com.github.appreciated.apexcharts.config.plotoptions.builder.BarBuilder;
+import com.github.appreciated.apexcharts.config.legend.Position;
+import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder;
 import com.github.appreciated.apexcharts.config.theme.Mode;
-import com.github.appreciated.apexcharts.helper.Series;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H5;
@@ -41,8 +40,14 @@ public class StatusPage extends VerticalLayout {
     Grid<Assignment> closingAssignments = new Grid<>(Assignment.class, false);
     TaskList taskList;
 
-    public StatusPage(CrmService crmService) {
+    private double totalNumberOfConsultants;
+    private double unassignedConsultants;
+    private double assignedConsultants;
+
+    public StatusPage(final CrmService crmService) {
         this.crmService = crmService;
+
+        calculateStats();
 
         H2 header = new H2("Status");
         header.addClassNames(LumoUtility.Margin.Top.XLARGE, LumoUtility.Margin.Bottom.MEDIUM);
@@ -50,7 +55,7 @@ public class StatusPage extends VerticalLayout {
 
         setSizeFull();
 
-        SplitLayout topLayout = new SplitLayout(configureOccupancyChart(), configureTaskList());
+        SplitLayout topLayout = new SplitLayout(configureUtilizationChart(), configureTaskList());
         topLayout.setSizeFull();
         topLayout.setSplitterPosition(40);
 
@@ -66,8 +71,18 @@ public class StatusPage extends VerticalLayout {
         updateContent();
     }
 
+    private void calculateStats() {
+        List<Consultant> allConsultants = crmService.findAllConsultants();
+        totalNumberOfConsultants = allConsultants.size();
+
+        unassignedConsultants = (int) allConsultants.stream()
+                .filter(c -> c.getAssignments().isEmpty())
+                .count();
+        assignedConsultants = totalNumberOfConsultants - unassignedConsultants;
+    }
+
     private VerticalLayout configureTaskList() {
-        H5 header = new H5("Current Tasks");
+        H5 header = new H5("Tasks Today");
 
         Grid<Task> grid = new Grid<>(Task.class, false);
         grid.setSizeFull();
@@ -76,41 +91,33 @@ public class StatusPage extends VerticalLayout {
         grid.addColumn(Task::getDescription).setHeader("Description");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
-        grid.setItems(crmService.findLastFiveTasks());
+        grid.setItems(crmService.findAllCurrentTasks());
 
         return new VerticalLayout(header, grid);
     }
 
-    private VerticalLayout configureOccupancyChart() {
-        H5 header = new H5("Consultant Occupancy");
-
-        List<Consultant> allConsultants = crmService.findAllConsultants();
-
-        int totalNumberOfConsultants = allConsultants.size();
-
-        int unassigned = (int) allConsultants.stream()
-                .filter(c -> c.getAssignments().isEmpty())
-                .count();
-        int assignedConsultants = totalNumberOfConsultants - unassigned;
-
-        Series<Integer> series = new Series<>(unassigned, assignedConsultants, totalNumberOfConsultants);
-        XAxis xAxis = XAxisBuilder.get().withCategories("Available", "On Assignment", "Total").build();
+    private VerticalLayout configureUtilizationChart() {
+        H5 header = new H5("Utilization");
 
         ApexCharts chart = ApexChartsBuilder.get().withChart(ChartBuilder.get()
                 .withBackground("#233348")
-                .withType(Type.BAR)
-                .withHeight("200")
+                .withType(Type.PIE)
+                .withHeight("150")
                 .build())
-                .withPlotOptions(PlotOptionsBuilder.get()
-                        .withBar(BarBuilder.get()
-                                .withHorizontal(true)
-                                .withDistributed(true)
-                                .build())
+                .withLegend(LegendBuilder.get()
+                        .withPosition(Position.RIGHT)
                         .build())
-                .withSeries(series)
-                .withXaxis(xAxis)
-                .withColors("#E91E63", "#00E396", "#2E93fA")
-                .build();
+                .withSeries(unassignedConsultants, assignedConsultants)
+                .withLabels("On Bench", "On Assignment")
+                .withColors("#E91E63", "#00E396")
+                .withResponsive(ResponsiveBuilder.get()
+                        .withOptions(OptionsBuilder.get()
+                                .withLegend(LegendBuilder.get()
+                                        .withPosition(Position.BOTTOM)
+                                        .build())
+                                .build())
+                        .build()).build();
+
         chart.setTheme(ThemeBuilder.get().withMode(Mode.DARK).build());
 
         return new VerticalLayout(header, chart);
