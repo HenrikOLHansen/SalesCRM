@@ -2,10 +2,12 @@ package com.example.application.data.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import lombok.Data;
 
 import java.time.LocalDate;
 
 @Entity
+@Data
 public class CompletedTask extends AbstractTask {
 
     @Column(length = DESC_MAX_LENGTH)
@@ -23,21 +25,5 @@ public class CompletedTask extends AbstractTask {
         setLink(task.getLink());
         setDueDate(task.getDueDate());
         setUsername(task.getUsername());
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public LocalDate getCompletionDate() {
-        return completionDate;
-    }
-
-    public void setCompletionDate(LocalDate completionDate) {
-        this.completionDate = completionDate;
     }
 }
