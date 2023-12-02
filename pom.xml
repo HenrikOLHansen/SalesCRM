@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
     <!-- Project from https://start.vaadin.com/project/67b1d1d2-6872-401b-a38e-c97be2c056c8 -->
     <groupId>com.consid.application</groupId>
-    <artifactId>flowcrmtutorial</artifactId>
-    <name>flowcrmtutorial</name>
+    <artifactId>crm</artifactId>
+    <name>sales-crm</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
