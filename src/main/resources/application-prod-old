@@ -1,7 +1,9 @@
-spring.datasource.url=jdbc:postgresql://{postgres_host}/postgres
-spring.datasource.username={db_user}
-spring.datasource.password={db_password}
+spring.datasource.url=jdbc:postgresql://207.154.221.162/consid
+spring.datasource.username=postgres
+spring.datasource.password=@Musemåtte1Plus
 spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 
 spring.jpa.properties.javax.persistence.schema-generation.scripts.action=drop-and-create
 spring.jpa.properties.javax.persistence.schema-generation.scripts.create-target=create_tables.sql

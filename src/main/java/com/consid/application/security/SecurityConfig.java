@@ -42,7 +42,7 @@ public class SecurityConfig extends VaadinWebSecurity {
         return new InMemoryUserDetailsManager(admin, createBasicUser("daniel"), createBasicUser("laurids"), createBasicUser("markus"));
     }
 
-    private UserDetails createBasicUser(String username) {
+    private UserDetails createBasicUser(final String username) {
         return User.builder()
                 .username(username)
                 // password = password with this hash, don't tell anybody :-)
