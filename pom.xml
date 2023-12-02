@@ -3,15 +3,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <!-- Project from https://start.vaadin.com/project/67b1d1d2-6872-401b-a38e-c97be2c056c8 -->
-    <groupId>com.example.application</groupId>
+    <groupId>com.consid.application</groupId>
     <artifactId>flowcrmtutorial</artifactId>
     <name>flowcrmtutorial</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
-        <java.version>19</java.version>
-        <vaadin.version>24.1.12</vaadin.version>
+        <java.version>21</java.version>
+        <vaadin.version>24.2.5</vaadin.version>
     </properties>
 
     <parent>
