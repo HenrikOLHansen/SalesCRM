@@ -21,7 +21,11 @@ public class Lead extends AbstractEntity {
     private Contact additionalContact;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "consultant_id")
+    @JoinTable(
+            name = "lead_consultant",
+            joinColumns = @JoinColumn(name = "lead_id"),
+            inverseJoinColumns = @JoinColumn(name = "consultant_id")
+    )
     private List<Consultant> consultants;
 
     @ManyToOne
