@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/java21-debian12
+FROM bellsoft/liberica-runtime-container:jdk-21-slim-musl
 WORKDIR /
 ADD target/*.jar app.jar
 EXPOSE 8080
