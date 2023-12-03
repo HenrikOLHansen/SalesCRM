@@ -21,8 +21,19 @@ public class SecurityService {
     }
 
     public void logout() {
-        // TODO: Implement getting username from authenticationContext without using getAuthenticatedUser
-        log.info("Logging out user");
-        authenticationContext.logout();
+        try {
+            log.info("Logging out user {}", getAuthenticatedUser().getUsername());
+        } catch (Exception e) {
+            log.info("Logging out unauthenticated user");
+        } finally {
+            authenticationContext.logout();
+        }
+    }
+
+    public boolean isAdmin() {
+        log.info("Checking if user is admin");
+        var user = getAuthenticatedUser();
+        return user.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
     }
 }

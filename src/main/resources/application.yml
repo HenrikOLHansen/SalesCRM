@@ -5,6 +5,8 @@ spring:
     mustache:
         check-template-location: false
     jpa:
+        hibernate:
+            ddl-auto: create-drop
         defer-datasource-initialization: true
 
 logging:

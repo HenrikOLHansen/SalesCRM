@@ -3,11 +3,13 @@ package com.consid.application.data.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class CompletedTask extends AbstractTask {
 
     @Column(length = DESC_MAX_LENGTH)

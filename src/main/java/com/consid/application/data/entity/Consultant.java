@@ -3,12 +3,14 @@ package com.consid.application.data.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Consultant extends AbstractEntity {
 
     @NotEmpty
