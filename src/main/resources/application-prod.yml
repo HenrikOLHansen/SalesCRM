@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: "consid-sales-crm"
+
+  datasource:
+    url: jdbc:postgresql://{postgres_host}:5432/consid
+    username: {db_user}
+    password: {db_password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
+
+vaadin:
+  production-mode: true

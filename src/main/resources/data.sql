@@ -57,3 +57,8 @@ INSERT INTO "COMPLETED_ASSIGNMENT" (ID, VERSION, CONSULTANT, CUSTOMER_CONTACT, A
 INSERT INTO "TASK" (ID, VERSION, TASK_CONTACT_ID, LINK, DESCRIPTION, DUE_DATE, USERNAME) VALUES
 (400, 1, 11, 'https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3773696405', 'C# Project', '2023-12-01', 'daniel'),
 (401, 1, 13, 'https://www.linkedin.com/jobs/view/3737405768/?alternateChannel=search&refId=kJ9G6Hld0CaMiRz3uur9jA%3D%3D&trackingId=FeyENqIJVtxTY1QL5UcF7g%3D%3D', 'Salesforce Opportunity with Nordea', '2024-01-05', 'laurids');
+INSERT INTO "USER_TABLE" (ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, VERSION) VALUES
+(500, 'Laruids', 'Lind', 'laurids.lind@consid.com', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 1);
+INSERT INTO "ROLE" (ID, NAME, VERSION) VALUES
+(600, 'ROLE_ADMIN', 1),
+(601, 'ROLE_USER', 1);

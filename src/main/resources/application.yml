@@ -1,0 +1,31 @@
+server:
+    port: ${PORT:8080}
+
+spring:
+    mustache:
+        check-template-location: false
+    jpa:
+        hibernate:
+            ddl-auto: create-drop
+        defer-datasource-initialization: true
+
+logging:
+    level:
+        org:
+            atmosphere: warn
+
+vaadin:
+    launch-browser: true
+    whitelisted-packages:
+        - com.vaadin
+        - org.vaadin
+        - dev.hilla
+        - com.consid.application
+        - com.github.appreciated.apexcharts
+
+consid:
+    sales:
+        contacts:
+            - Markus
+            - Daniel
+            - Laurids
