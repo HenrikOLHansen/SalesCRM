@@ -3,6 +3,7 @@ package com.consid.application.views;
 import com.consid.application.data.entity.Contact;
 import com.consid.application.data.service.CrmService;
 import com.consid.application.security.SecurityService;
+import com.consid.application.views.form.CreateUserForm;
 import com.consid.application.views.form.TaskForm;
 import com.consid.application.views.list.*;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -23,6 +24,7 @@ import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Collection;
 
@@ -30,11 +32,10 @@ public class MainLayout extends AppLayout {
 
     private final SecurityService securityService;
     private final CrmService crmService;
-
     TaskForm taskForm;
     Dialog taskDialog = new Dialog();
 
-    public MainLayout(SecurityService securityService, CrmService crmService) {
+    public MainLayout(final SecurityService securityService, final CrmService crmService) {
         this.securityService = securityService;
         this.crmService = crmService;
         createDrawer();
@@ -81,12 +82,11 @@ public class MainLayout extends AppLayout {
                 new SideNavItem("Assignments", AssignmentList.class, VaadinIcon.CLIPBOARD_USER.create()));
 
         var taskNav = getTaskNav();
-
         var dataNav = getDataNav();
-
         var archiveNav = getArchiveNav();
+        var userNav = getUserNav();
 
-        VerticalLayout navWrapper = new VerticalLayout(topNav, dataNav, taskNav, archiveNav);
+        var navWrapper = new VerticalLayout(topNav, dataNav, taskNav, archiveNav, userNav);
         navWrapper.setSpacing(true);
         navWrapper.setSizeUndefined();
 
@@ -124,7 +124,16 @@ public class MainLayout extends AppLayout {
         return archiveNav;
     }
 
-    private void handleDroppedItem(DropEvent<SideNav> dropEvent) {
+    private SideNav getUserNav() {
+        var userNav = new SideNav("User");
+       //  userNav.setVisible(securityService.isAdmin());
+        userNav.setCollapsible(true);
+        userNav.setExpanded(false);
+        userNav.addItem(new SideNavItem("User List", UserList.class, VaadinIcon.USERS.create()));
+        return userNav;
+    }
+
+    private void handleDroppedItem(final DropEvent<SideNav> dropEvent) {
         dropEvent.getDragData().ifPresent(data -> {
             Object payload = ((Collection) data).iterator().next();
             if(payload instanceof Contact selectedContact) {
@@ -143,7 +152,7 @@ public class MainLayout extends AppLayout {
         taskDialog.add(taskForm);
     }
 
-    private void saveTask(TaskForm.SaveEvent saveEvent) {
+    private void saveTask(final TaskForm.SaveEvent saveEvent) {
         crmService.saveTask(saveEvent.getTask());
         var notification = Notification.show("Task Created!", 3000, Notification.Position.TOP_CENTER);
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);

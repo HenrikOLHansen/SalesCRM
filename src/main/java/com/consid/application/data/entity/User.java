@@ -1,6 +1,7 @@
 package com.consid.application.data.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +16,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class User extends AbstractEntity {
 
+        @NotEmpty
         private String firstName;
-
+        @NotEmpty
         private String lastName;
-
+        @NotEmpty
         private String email;
-
+        @NotEmpty
         private String password;
 
         @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
