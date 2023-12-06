@@ -1,6 +1,7 @@
 package com.consid.application.views.list;
 
 import com.consid.application.data.entity.User;
+import com.consid.application.data.repository.RoleRepository;
 import com.consid.application.data.service.UserService;
 import com.consid.application.views.MainLayout;
 import com.consid.application.views.form.CreateUserForm;
@@ -20,11 +21,12 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.RolesAllowed;
 
-@RolesAllowed("ADMIN")
+@RolesAllowed("ROLE_ADMIN")
 @PageTitle("Users | Sales CRM")
 @Route(value = "users", layout = MainLayout.class)
 public class UserList extends VerticalLayout {
 
+    private final RoleRepository roleRepository;
     TextField filterText = new TextField();
     Grid<User> grid = new Grid<>(User.class);
     GridListDataView<User> dataView;
@@ -34,8 +36,9 @@ public class UserList extends VerticalLayout {
     private final UserService service;
 
 
-    public UserList(final UserService userService) {
+    public UserList(final UserService userService, final RoleRepository roleRepository) {
         this.service = userService;
+        this.roleRepository = roleRepository;
         setSpacing(false);
 
         H2 header = new H2("Users");
@@ -72,7 +75,7 @@ public class UserList extends VerticalLayout {
     }
 
     private void setupDialog() {
-        createUserForm = new CreateUserForm();
+        createUserForm = new CreateUserForm(roleRepository);
         createUserForm.addSaveListener(this::saveUser);
         createUserForm.addCloseListener(e -> closeDialog());
 

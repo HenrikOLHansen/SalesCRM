@@ -37,7 +37,7 @@ public class ConsidUserDetailsService implements UserDetailsService {
         // if the authenticated user has no roles, we add the USER role
         if (userRoles.isEmpty()) {
             userRoles.add(Role.builder()
-                    .name("ADMIN")
+                    .name("ROLE_ADMIN")
                     .build());
         }
         return userRoles.stream()

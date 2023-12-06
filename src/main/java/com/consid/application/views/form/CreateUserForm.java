@@ -1,11 +1,16 @@
 package com.consid.application.views.form;
 
+import com.consid.application.data.entity.Role;
+import com.consid.application.data.entity.Skill;
 import com.consid.application.data.entity.User;
+import com.consid.application.data.repository.RoleRepository;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -14,27 +19,39 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.shared.Registration;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.Set;
+
+@Slf4j
 public class CreateUserForm extends FormLayout {
     BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
+
+    private final RoleRepository roleRepository;
 
     TextField firstName = new TextField("First name");
     TextField lastName = new TextField("Last name");
     EmailField email = new EmailField("Email");
     PasswordField password = new PasswordField("Password");
     PasswordField confirmPassword = new PasswordField("Confirm password");
+    CheckboxGroup<Role> rolesSelector;
     Button saveButton = new Button("Save");
     Button cancelButton = new Button("Cancel");
 
-    public CreateUserForm() {
+    public CreateUserForm(final RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+
         addClassName("create-user-form");
         binder.bindInstanceFields(this);
+
+        configureRoles();
 
         add(firstName,
                 lastName,
                 email,
                 password,
                 confirmPassword,
+                rolesSelector,
                 createButtonsLayout());
     }
 
@@ -53,8 +70,19 @@ public class CreateUserForm extends FormLayout {
         return new HorizontalLayout(saveButton, cancelButton);
     }
 
+    private void configureRoles() {
+        rolesSelector = new CheckboxGroup<>();
+        rolesSelector.setLabel("Select Roles");
+        rolesSelector.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+
+        rolesSelector.setItems(roleRepository.findAll());
+    }
+
     private void validateAndSave() {
         if (binder.isValid()) {
+            Set<Role> roles = rolesSelector.getSelectedItems();
+            log.info("Selected roles: {}", roles);
+            binder.getBean().setRoles(roles.stream().toList());
             fireEvent(new CreateUserForm.SaveEvent(this, binder.getBean()));
         }
     }

@@ -126,7 +126,7 @@ public class MainLayout extends AppLayout {
 
     private SideNav getUserNav() {
         var userNav = new SideNav("User");
-       //  userNav.setVisible(securityService.isAdmin());
+        userNav.setVisible(securityService.isAdmin());
         userNav.setCollapsible(true);
         userNav.setExpanded(false);
         userNav.addItem(new SideNavItem("User List", UserList.class, VaadinIcon.USERS.create()));

@@ -34,6 +34,6 @@ public class SecurityService {
         log.info("Checking if user is admin");
         var user = getAuthenticatedUser();
         return user.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+                .anyMatch(authority -> authority.getAuthority().contains("ADMIN"));
     }
 }
