@@ -8,11 +8,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -99,5 +105,47 @@ public class UserServiceTest {
         userService.getUsers();
 
         verify(userRepository, times(1)).findAll();
+    }
+
+    @Test
+    public void whenUpdatePasswordForAnotherUser_thenThrowIllegalArgumentException() {
+        User user = new User();
+        user.setEmail("test@email.com");
+        User authenticatedUser = new User();
+        authenticatedUser.setEmail("other@email.com");
+        authenticatedUser.setRoles(List.of(Role.builder().name("USER").build()));
+        authenticatedUser.setPassword("pA9*#5vB1&Xr!6Tc8@Zu%4St$7Q_3q");
+
+        Collection<GrantedAuthority> authorities = authenticatedUser.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+
+        when(securityService.getAuthenticatedUser()).thenReturn(new org.springframework.security.core.userdetails.User(authenticatedUser.getEmail(), authenticatedUser.getPassword(), authorities));
+        when(securityService.isAdmin()).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            userService.updatePassword(user, "newPassword");
+        });
+    }
+
+    @Test
+    public void whenUpdatePasswordWithWeakNewPassword_thenThrowIllegalArgumentException() {
+        User user = new User();
+        user.setEmail("test@email.com");
+        User authenticatedUser = new User();
+        authenticatedUser.setEmail("test@email.com");
+        authenticatedUser.setRoles(List.of(Role.builder().name("USER").build()));
+        authenticatedUser.setPassword("pA9*#5vB1&Xr!6Tc8@Zu%4St$7Q_3q");
+
+        Collection<GrantedAuthority> authorities = authenticatedUser.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+
+        when(securityService.getAuthenticatedUser()).thenReturn(new org.springframework.security.core.userdetails.User(authenticatedUser.getEmail(), authenticatedUser.getPassword(), authorities));
+        when(securityService.isAdmin()).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            userService.updatePassword(user, "weak");
+        });
     }
 }
