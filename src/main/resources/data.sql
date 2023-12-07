@@ -58,7 +58,17 @@ INSERT INTO "TASK" (ID, VERSION, TASK_CONTACT_ID, LINK, DESCRIPTION, DUE_DATE, U
 (400, 1, 11, 'https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3773696405', 'C# Project', '2023-12-01', 'daniel'),
 (401, 1, 13, 'https://www.linkedin.com/jobs/view/3737405768/?alternateChannel=search&refId=kJ9G6Hld0CaMiRz3uur9jA%3D%3D&trackingId=FeyENqIJVtxTY1QL5UcF7g%3D%3D', 'Salesforce Opportunity with Nordea', '2024-01-05', 'laurids');
 INSERT INTO "USER_TABLE" (ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, VERSION) VALUES
-(500, 'Laruids', 'Lind', 'laurids.lind@consid.com', '{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 1);
+(500, 'Laruids', 'Lind', 'laurids.lind@consid.com', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 1);
 INSERT INTO "ROLE" (ID, NAME, VERSION) VALUES
 (600, 'ROLE_ADMIN', 1),
 (601, 'ROLE_USER', 1);
+INSERT INTO "ASSIGNMENT" (ID, VERSION, CONSULTANT_ID, CUSTOMER_CONTACT_ID, CONSID_CONTACT_ID, START_DATE, END_DATE, DESCRIPTION) VALUES
+(701, 1, 100, 11, NULL, '2022-05-10', '2022-10-28', ''),
+(702, 1, 100, 13, NULL, '2023-10-10', '2024-01-30', ''),
+(703, 1, 100, 12, NULL, '2023-02-01', '2023-10-01', ''),
+(704, 1, 100, 11, NULL, '2024-03-01', '2024-06-30', ''),
+(705, 1, 102, 12, NULL, '2024-02-01', '2024-06-01', ''),
+(706, 1, 103, 11, NULL, '2024-03-05', '2024-05-25', ''),
+(707, 1, 101, 11, NULL, '2024-01-11', '2024-10-01', ''),
+(708, 1, 104, 11, NULL, '2023-12-01', '2024-04-20', ''),
+(709, 1, 101, 11, NULL, '2022-03-05', '2023-05-25', '');
