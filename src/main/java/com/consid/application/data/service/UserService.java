@@ -2,6 +2,7 @@ package com.consid.application.data.service;
 
 import com.consid.application.data.entity.Role;
 import com.consid.application.data.entity.User;
+import com.consid.application.data.exceptions.UserException;
 import com.consid.application.data.repository.UserRepository;
 import com.consid.application.security.SecurityService;
 import jakarta.validation.constraints.NotNull;
@@ -18,21 +19,29 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final static int MINIMUM_ENTROPY = 65;
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
     private final SecurityService securityService;
 
-    public User registerUser(final User user, final Role... roles) throws IllegalArgumentException {
+    public User registerUser(final User user, final Role... roles) throws UserException {
         log.info("Registering user {}", user);
+        if (user == null) {
+            throw new UserException("Cannot register null user");
+        }
+        if (!securityService.isAdmin()) {
+            throw new UserException("Only admin can register new users");
+        }
         if (userRepository.findByEmailIgnoreCase(user.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("User with email " + user.getEmail() + " already exists");
+            throw new UserException("User with email " + user.getEmail() + " already exists");
         }
         var rolesList = List.of(roles);
         if (rolesList.isEmpty()) {
-            throw new IllegalArgumentException("User must have at least one role");
+            throw new UserException("User must have at least one role");
         }
-        if (calculateEntropy(user.getPassword()) < 150) {
-            throw new IllegalArgumentException("Password is too weak");
+        if (calculateEntropy(user.getPassword()) < MINIMUM_ENTROPY) {
+            throw new UserException("Password is too weak");
         }
         user.setRoles(rolesList);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -49,19 +58,19 @@ public class UserService {
         return userRepository.findByEmailIgnoreCase(email);
     }
 
-    public User updatePassword(final User user, final String newPassword) {
+    public User updatePassword(final User user, final String newPassword) throws UserException {
         log.info("Updating password for user {}, initiated by {}", user, securityService.getAuthenticatedUser());
         if (user == null) {
-            throw new IllegalArgumentException("User cannot be null");
+            throw new UserException("Cannot update password for null user");
         }
         // check that the user is the same as the authenticated user or is an admin.
         if (!user.getEmail().equals(securityService.getAuthenticatedUser().getUsername())
                 || !securityService.isAdmin()) {
-            throw new IllegalArgumentException("User is not allowed to update password for user " + user);
+            throw new UserException("User is not allowed to update password for user " + user);
         }
 
-        if (calculateEntropy(newPassword) < 150) {
-            throw new IllegalArgumentException("Password is too weak");
+        if (calculateEntropy(newPassword) < MINIMUM_ENTROPY) {
+            throw new UserException("Password is too weak");
         }
         user.setPassword(bCryptPasswordEncoder.encode(newPassword));
         return userRepository.save(user);
@@ -70,6 +79,7 @@ public class UserService {
     /**
      * calculate the entropy of a password
      * to determined if the password is strong enough
+     * 65 and above is considered strong
      * @param password
      * @return
      */

@@ -3,6 +3,7 @@ package com.consid.application.views.form;
 import com.consid.application.data.entity.Role;
 import com.consid.application.data.entity.Skill;
 import com.consid.application.data.entity.User;
+import com.consid.application.data.exceptions.UserException;
 import com.consid.application.data.repository.RoleRepository;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -12,6 +13,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -79,11 +81,18 @@ public class CreateUserForm extends FormLayout {
     }
 
     private void validateAndSave() {
-        if (binder.isValid()) {
-            Set<Role> roles = rolesSelector.getSelectedItems();
-            log.info("Selected roles: {}", roles);
-            binder.getBean().setRoles(roles.stream().toList());
-            fireEvent(new CreateUserForm.SaveEvent(this, binder.getBean()));
+        try {
+            if (binder.isValid()) {
+                Set<Role> roles = rolesSelector.getSelectedItems();
+                log.info("Selected roles: {}", roles);
+                binder.getBean().setRoles(roles.stream().toList());
+                fireEvent(new CreateUserForm.SaveEvent(this, binder.getBean()));
+            }
+        } catch (UserException e) {
+            new Notification(
+                    "Something went wrong.: " + e.getMessage(), 3000,
+                    Notification.Position.TOP_CENTER
+            ).open();
         }
     }
 
