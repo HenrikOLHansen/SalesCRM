@@ -1,11 +1,12 @@
 package com.consid.application.views.list;
 
 import com.consid.application.data.entity.Skill;
+import com.consid.application.data.entity.SkillType;
 import com.consid.application.data.service.CrmService;
 import com.consid.application.views.MainLayout;
 import com.consid.application.views.form.SkillForm;
+import com.consid.application.views.form.SkillTypeForm;
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
@@ -20,37 +21,62 @@ import jakarta.annotation.security.PermitAll;
 @PermitAll
 @PageTitle("Skills | Sales CRM")
 @Route(value = "skills", layout = MainLayout.class)
-public class SkillList extends VerticalLayout {
+public class SkillList extends HorizontalLayout {
 
-    Grid<Skill> grid = new Grid<>(Skill.class, false);
+    Grid<Skill> skillsGrid = new Grid<>(Skill.class, false);
+    Grid<SkillType> skillTypesGrid = new Grid<>(SkillType.class, false);
 
     Dialog skillDialog = new Dialog();
+    Dialog skillTypeDialog = new Dialog();
     SkillForm skillForm;
+    SkillTypeForm skillTypeForm;
     private final CrmService crmService;
 
     public SkillList(CrmService crmService) {
         this.crmService = crmService;
 
-        H2 header = new H2("Skills");
-        header.addClassNames(LumoUtility.Margin.Top.XLARGE, LumoUtility.Margin.Bottom.MEDIUM);
-        add(header);
-
         setSizeFull();
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
 
-        add(createToolbar(), grid);
+        add(createSkillsLayout(), createSkillTypesLayout());
 
-        setupDialog();
+        setupSkillDialog();
+        setupSkillTypeDialog();
 
-        configureGrid();
         updateGridContent();
     }
 
-    private Component createToolbar() {
+    private VerticalLayout createSkillsLayout() {
+        var layout = new VerticalLayout();
+
+        H2 header = new H2("Skills");
+        header.addClassNames(LumoUtility.Margin.Top.XLARGE, LumoUtility.Margin.Bottom.MEDIUM);
+        layout.add(header);
+
         Button createNewSkillButton = new Button("New Skill");
         createNewSkillButton.addClickListener(this::createNewSkill);
-        return new HorizontalLayout(createNewSkillButton);
+
+        layout.add(createNewSkillButton, skillsGrid);
+
+        configureSkillsGrid();
+
+        return layout;
+    }
+
+    private VerticalLayout createSkillTypesLayout() {
+        var layout = new VerticalLayout();
+
+        H2 header = new H2("Skill Types");
+        header.addClassNames(LumoUtility.Margin.Top.XLARGE, LumoUtility.Margin.Bottom.MEDIUM);
+        layout.add(header);
+
+        configureSkillTypesGrid();
+
+        Button createNewSkillTypeButton = new Button("New Skill Type");
+        createNewSkillTypeButton.addClickListener(this::createNewSkillType);
+
+        layout.add(createNewSkillTypeButton, skillTypesGrid);
+
+        return layout;
     }
 
     private void createNewSkill(ClickEvent<Button> buttonClickEvent) {
@@ -58,17 +84,30 @@ public class SkillList extends VerticalLayout {
         skillDialog.open();
     }
 
+    private void createNewSkillType(ClickEvent<Button> buttonClickEvent) {
+        skillTypeForm.setSkillType(new SkillType());
+        skillTypeDialog.open();
+    }
+
     private void editSkill(Skill skill) {
         skillForm.setSkill(skill);
         skillDialog.open();
     }
 
-    private void setupDialog() {
+    private void setupSkillDialog() {
         skillForm = new SkillForm();
         skillForm.addSaveListener(this::saveSkill);
-        skillForm.addCloseListener(e -> closeDialog());
+        skillForm.addCloseListener(e -> skillDialog.close());
 
         skillDialog.add(skillForm);
+    }
+
+    private void setupSkillTypeDialog() {
+        skillTypeForm = new SkillTypeForm();
+        skillTypeForm.addSaveListener(this::saveSkillType);
+        skillTypeForm.addCloseListener(e -> skillTypeDialog.close());
+
+        skillTypeDialog.add(skillTypeForm);
     }
 
     private void saveSkill(SkillForm.SaveEvent saveEvent) {
@@ -77,17 +116,31 @@ public class SkillList extends VerticalLayout {
         skillDialog.close();
     }
 
-    private void closeDialog() { skillDialog.close(); }
+    private void saveSkillType(SkillTypeForm.SaveEvent saveEvent) {
+        crmService.saveSkillType(saveEvent.getSkillType());
+        updateGridContent();
+        skillTypeDialog.close();
+    }
 
+    private void configureSkillsGrid() {
+        skillsGrid.addClassNames("skill-grid");
+        skillsGrid.setSizeFull();
+        skillsGrid.addColumn(Skill::getName);
+        skillsGrid.getColumns().forEach(col -> col.setAutoWidth(true));
+    }
 
-    private void configureGrid() {
-        grid.addClassNames("skill-grid");
-        grid.setSizeFull();
-        grid.addColumn("name");
-        grid.getColumns().forEach(col -> col.setAutoWidth(true));
+    private void configureSkillTypesGrid() {
+        skillTypesGrid.addClassNames("skill-types-grid");
+        skillTypesGrid.setSizeFull();
+        skillTypesGrid.addColumn(SkillType::getType);
+        skillTypesGrid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 
     private void updateGridContent() {
-        grid.setItems(crmService.findAllSkills());
+        var skills = crmService.findAllSkills();
+        var skillTypes = crmService.findAllSkillTypes();
+
+        skillsGrid.setItems(skills);
+        skillTypesGrid.setItems(skillTypes);
     }
 }
