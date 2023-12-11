@@ -1,6 +1,7 @@
 package com.consid.application;
 
 import com.consid.application.config.CRMConfig;
+import com.consid.application.data.service.ArchiveScheduler;
 import com.consid.application.data.service.CrmService;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.theme.Theme;
@@ -34,11 +35,14 @@ public class Application implements AppShellConfigurator {
     }
 
     @Bean
-    CommandLineRunner config(final CRMConfig config, final CrmService crmService) {
+    CommandLineRunner config(final CRMConfig config, final CrmService crmService, final ArchiveScheduler archiveScheduler) {
         return args -> {
             logger.info("Loading configuration properties...");
             logger.info("Found {} Consid contact names", config.getContacts().size());
             crmService.saveConsidContacts(config.getContacts());
+
+            // Archive old assignments
+            archiveScheduler.archiveAssignments();
         };
     }
 
