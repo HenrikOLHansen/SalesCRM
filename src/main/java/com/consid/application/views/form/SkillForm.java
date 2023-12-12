@@ -1,32 +1,44 @@
 package com.consid.application.views.form;
 
 import com.consid.application.data.entity.Skill;
+import com.consid.application.data.entity.SkillType;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.shared.Registration;
 
+import java.util.List;
+
 public class SkillForm extends FormLayout {
 
     BeanValidationBinder<Skill> binder = new BeanValidationBinder<>(Skill.class);
 
     TextField name = new TextField("Skill Name");
+    ComboBox<SkillType> skillType = new ComboBox<>("Skill Type");
 
     Button saveButton = new Button("Save");
     Button cancelButton = new Button("Cancel");
 
-    public SkillForm() {
+    public SkillForm(List<SkillType> skillTypes) {
         addClassName("skill-form");
 
         binder.bindInstanceFields(this);
 
-        add(name, createButtonsLayout());
+        skillType.setItems(skillTypes);
+        skillType.setItemLabelGenerator(SkillType::getType);
+
+        add(name, skillType, createButtonsLayout());
+    }
+
+    public void updateSkillTypes(List<SkillType> skillTypes) {
+        skillType.setItems(skillTypes);
     }
 
     private HorizontalLayout createButtonsLayout() {

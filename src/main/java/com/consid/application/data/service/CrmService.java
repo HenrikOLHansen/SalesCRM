@@ -3,8 +3,6 @@ package com.consid.application.data.service;
 import com.consid.application.data.entity.*;
 import com.consid.application.data.repository.*;
 import com.consid.application.security.SecurityService;
-import com.consid.application.data.entity.*;
-import com.consid.application.data.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +20,7 @@ public class CrmService {
     private final CompanyRepository companyRepository;
     private final LeadRepository leadRepository;
     private final SkillRepository skillRepository;
+    private final SkillTypeRepository skillTypeRepository;
     private final ConsultantRepository consultantRepository;
     private final AssignmentRepository assignmentRepository;
     private final CompletedAssignmentRepository completedAssignmentRepository;
@@ -70,6 +69,14 @@ public class CrmService {
             return;
         }
         skillRepository.save(skill);
+    }
+
+    public void saveSkillType(SkillType skillType) {
+        if(skillType == null) {
+            log.error("SkillType cannot be null.");
+            return;
+        }
+        skillTypeRepository.save(skillType);
     }
 
     public void saveConsultant(Consultant consultant) {
@@ -123,6 +130,8 @@ public class CrmService {
 
     public List<Skill> findAllSkills() { return skillRepository.findAll(); }
 
+    public List<SkillType> findAllSkillTypes() { return skillTypeRepository.findAll(); }
+
     public List<Consultant> findAllConsultants() { return consultantRepository.findAll(); }
 
     public List<Assignment> findAllAssignments() { return assignmentRepository.findAll(); }
@@ -160,4 +169,5 @@ public class CrmService {
     private String getCurrentLoggedInUsername() {
         return securityService.getAuthenticatedUser().getUsername();
     }
+
 }

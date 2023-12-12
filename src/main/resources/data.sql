@@ -22,26 +22,32 @@ INSERT INTO "CONTACT" (ID, VERSION, EMAIL,FIRST_NAME,LAST_NAME,COMPANY_ID, PHONE
 -- (42, 1, 'Daniel');
 INSERT INTO "LEAD" (ID, VERSION, CUSTOMER_CONTACT_ID, START_DATE, END_DATE, DESCRIPTION) VALUES
 (61, 1, 11, '2023-12-01', '2024-04-01', 'C# Senior Engineer needed');
-INSERT  INTO "SKILL" (ID, VERSION, NAME) VALUES
-(62, 1, 'C#'),
-(63, 1, 'Java'),
-(64, 1, 'Salesforce'),
-(65, 1, 'Kubernetes'),
-(66, 1, 'Docker'),
-(67, 1, 'Scrum Master'),
-(68, 1, 'Frontend'),
-(69, 1, 'Design/UX'),
-(70, 1, 'Javascript'),
-(71, 1, 'AWS'),
-(72, 1, 'MySQL'),
-(73, 1, 'PostgreSQL'),
-(74, 1, 'GraphQL'),
-(75, 1, 'REST API'),
-(76, 1, 'Database'),
-(77, 1, 'Oracle DB'),
-(78, 1, 'Frontend'),
-(79, 1, 'Backend'),
-(80, 1, 'FullStack');
+INSERT  INTO "SKILL_TYPE" (ID, VERSION, TYPE) VALUES
+(700, 1, 'Programming Language'),
+(701, 1, 'Technology'),
+(702, 1, 'Database'),
+(703, 1, 'Methodology'),
+(704, 1, 'Cloud');
+INSERT  INTO "SKILL" (ID, VERSION, NAME, SKILL_ID) VALUES
+(62, 1, 'C#', 700),
+(63, 1, 'Java', 700),
+(64, 1, 'Salesforce', 701),
+(65, 1, 'Kubernetes', 704),
+(66, 1, 'Docker', 704),
+(67, 1, 'Scrum Master', 703),
+(68, 1, 'Frontend', 701),
+(69, 1, 'Design/UX', 701),
+(70, 1, 'Javascript', 700),
+(71, 1, 'AWS', 704),
+(72, 1, 'MySQL', 702),
+(73, 1, 'PostgreSQL', 702),
+(74, 1, 'GraphQL', 701),
+(75, 1, 'REST API', 701),
+(76, 1, 'MongoDB', 702),
+(77, 1, 'Oracle DB', 702),
+(78, 1, 'Frontend', 701),
+(79, 1, 'Backend', 701),
+(80, 1, 'FullStack', 701);
 INSERT INTO "CONSULTANT" (ID, VERSION, FIRST_NAME, LAST_NAME) VALUES
 (100, 1, 'Henrik', 'Hansen'),
 (101, 1, 'Daniel', 'Jensen'),
