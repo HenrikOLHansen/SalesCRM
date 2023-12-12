@@ -94,8 +94,13 @@ public class SkillList extends HorizontalLayout {
         skillDialog.open();
     }
 
+    private void editSkillType(SkillType skillType) {
+        skillTypeForm.setSkillType(skillType);
+        skillTypeDialog.open();
+    }
+
     private void setupSkillDialog() {
-        skillForm = new SkillForm();
+        skillForm = new SkillForm(crmService.findAllSkillTypes());
         skillForm.addSaveListener(this::saveSkill);
         skillForm.addCloseListener(e -> skillDialog.close());
 
@@ -127,6 +132,7 @@ public class SkillList extends HorizontalLayout {
         skillsGrid.setSizeFull();
         skillsGrid.addColumn(Skill::getName);
         skillsGrid.getColumns().forEach(col -> col.setAutoWidth(true));
+        skillsGrid.asSingleSelect().addValueChangeListener(event -> editSkill(event.getValue()));
     }
 
     private void configureSkillTypesGrid() {
@@ -134,12 +140,14 @@ public class SkillList extends HorizontalLayout {
         skillTypesGrid.setSizeFull();
         skillTypesGrid.addColumn(SkillType::getType);
         skillTypesGrid.getColumns().forEach(col -> col.setAutoWidth(true));
+        skillTypesGrid.asSingleSelect().addValueChangeListener(event -> editSkillType(event.getValue()));
     }
 
     private void updateGridContent() {
         var skills = crmService.findAllSkills();
         var skillTypes = crmService.findAllSkillTypes();
 
+        skillForm.updateSkillTypes(skillTypes);
         skillsGrid.setItems(skills);
         skillTypesGrid.setItems(skillTypes);
     }
