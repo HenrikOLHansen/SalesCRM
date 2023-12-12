@@ -28,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +59,6 @@ public class ForecastPage extends VerticalLayout {
     }
 
     private VerticalLayout getTimelineChart() {
-        var firstDayNextMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfNextMonth()); // TODO remove
-
         var coordinates = new ArrayList<DateCoordinate<String>>();
         var assignments = assignmentService.getAssignmentsFromDate();
 
@@ -96,6 +93,7 @@ public class ForecastPage extends VerticalLayout {
 
         Series series = new Series<>();
         series.setType(SeriesType.AREA);
+        series.setName("Utilization Percentage");
         series.setData(data);
 
         return new VerticalLayout(Alignment.CENTER, createUtilizationChart().withSeries(series).build());

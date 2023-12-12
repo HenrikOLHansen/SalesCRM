@@ -1,30 +1,16 @@
 package com.consid.application.views.list;
 
 import com.consid.application.data.entity.Assignment;
-import com.consid.application.data.entity.Consultant;
 import com.consid.application.data.entity.Task;
 import com.consid.application.data.service.CrmService;
 import com.consid.application.views.MainLayout;
-import com.github.appreciated.apexcharts.ApexCharts;
-import com.github.appreciated.apexcharts.ApexChartsBuilder;
-import com.github.appreciated.apexcharts.config.builder.ChartBuilder;
-import com.github.appreciated.apexcharts.config.builder.LegendBuilder;
-import com.github.appreciated.apexcharts.config.builder.ResponsiveBuilder;
-import com.github.appreciated.apexcharts.config.builder.ThemeBuilder;
-import com.github.appreciated.apexcharts.config.chart.Type;
-import com.github.appreciated.apexcharts.config.legend.Position;
-import com.github.appreciated.apexcharts.config.responsive.builder.OptionsBuilder;
-import com.github.appreciated.apexcharts.config.theme.Mode;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.PermitAll;
 
 import java.time.LocalDate;
@@ -38,28 +24,19 @@ public class StatusPage extends VerticalLayout {
 
     private final CrmService crmService;
     Grid<Assignment> closingAssignments = new Grid<>(Assignment.class, false);
-    TaskList taskList;
-
-    private double totalNumberOfConsultants;
-    private double unassignedConsultants;
-    private double assignedConsultants;
+    Grid<Task> grid;
 
     public StatusPage(final CrmService crmService) {
         this.crmService = crmService;
 
-        calculateStats();
-
-        H2 header = new H2("Status");
-        header.addClassNames(LumoUtility.Margin.Top.XLARGE, LumoUtility.Margin.Bottom.MEDIUM);
-        add(header);
-
         setSizeFull();
 
-        SplitLayout topLayout = new SplitLayout(configureUtilizationChart(), configureTaskList());
-        topLayout.setSizeFull();
-        topLayout.setSplitterPosition(40);
+        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
 
-        add(topLayout);
+        add(new H5("Tasks Due Today"));
+
+        configureTaskList();
+        add(grid);
 
         add(new Hr());
 
@@ -71,20 +48,8 @@ public class StatusPage extends VerticalLayout {
         updateContent();
     }
 
-    private void calculateStats() {
-        List<Consultant> allConsultants = crmService.findAllConsultants();
-        totalNumberOfConsultants = allConsultants.size();
-
-        unassignedConsultants = (int) allConsultants.stream()
-                .filter(c -> c.getAssignments().isEmpty())
-                .count();
-        assignedConsultants = totalNumberOfConsultants - unassignedConsultants;
-    }
-
-    private VerticalLayout configureTaskList() {
-        H5 header = new H5("Tasks Today");
-
-        Grid<Task> grid = new Grid<>(Task.class, false);
+    private void configureTaskList() {
+        grid = new Grid<>(Task.class, false);
         grid.setSizeFull();
         grid.addColumn(task -> task.getContact().toString()).setHeader("Contact");
         grid.addColumn(Task::getDueDate).setHeader("Due Date");
@@ -92,35 +57,6 @@ public class StatusPage extends VerticalLayout {
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         grid.setItems(crmService.findAllCurrentTasks());
-
-        return new VerticalLayout(header, grid);
-    }
-
-    private VerticalLayout configureUtilizationChart() {
-        H5 header = new H5("Utilization");
-
-        ApexCharts chart = ApexChartsBuilder.get().withChart(ChartBuilder.get()
-                .withBackground("#233348")
-                .withType(Type.PIE)
-                .withHeight("150")
-                .build())
-                .withLegend(LegendBuilder.get()
-                        .withPosition(Position.RIGHT)
-                        .build())
-                .withSeries(unassignedConsultants, assignedConsultants)
-                .withLabels("On Bench", "On Assignment")
-                .withColors("#E91E63", "#00E396")
-                .withResponsive(ResponsiveBuilder.get()
-                        .withOptions(OptionsBuilder.get()
-                                .withLegend(LegendBuilder.get()
-                                        .withPosition(Position.BOTTOM)
-                                        .build())
-                                .build())
-                        .build()).build();
-
-        chart.setTheme(ThemeBuilder.get().withMode(Mode.DARK).build());
-
-        return new VerticalLayout(header, chart);
     }
 
     private void configureClosingAssignments() {

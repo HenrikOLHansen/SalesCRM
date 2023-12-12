@@ -85,15 +85,17 @@ public class TaskForm extends FormLayout {
         binder.setBean(task);
     }
 
-    public void prepareForm(List<Contact> contacts) {
+    public void prepareForm(List<Contact> contacts, UserDetails currentUser) {
         Task task = new Task();
+        task.setUsername(currentUser.getUsername());
         task.setDueDate(LocalDate.now());
         contact.setItems(contacts);
 
         binder.setBean(task);
     }
 
-    public void prepareForm(Task task) {
+    public void prepareForm(Task task, UserDetails currentUser) {
+        task.setUsername(currentUser.getUsername());
         contact.setItems(task.getContact());
         contact.setValue(task.getContact());
         contact.setReadOnly(true);

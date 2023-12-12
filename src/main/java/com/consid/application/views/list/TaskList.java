@@ -2,6 +2,7 @@ package com.consid.application.views.list;
 
 import com.consid.application.data.entity.Task;
 import com.consid.application.data.service.CrmService;
+import com.consid.application.security.SecurityService;
 import com.consid.application.views.MainLayout;
 import com.consid.application.views.form.CompleteTaskForm;
 import com.consid.application.views.form.TaskForm;
@@ -38,9 +39,11 @@ public class TaskList extends VerticalLayout {
     Dialog completeTaskDialog = new Dialog();
 
     private final CrmService crmService;
+    private final SecurityService securityService;
 
-    public TaskList(CrmService crmService) {
+    public TaskList(CrmService crmService, SecurityService securityService) {
         this.crmService = crmService;
+        this.securityService = securityService;
 
         H2 header = new H2("Tasks");
         header.addClassNames(LumoUtility.Margin.Top.XLARGE, LumoUtility.Margin.Bottom.MEDIUM);
@@ -104,7 +107,7 @@ public class TaskList extends VerticalLayout {
     }
 
     private void editTask(Task task) {
-        taskForm.prepareForm(task);
+        taskForm.prepareForm(task, securityService.getAuthenticatedUser());
         taskDialog.open();
     }
 
@@ -126,7 +129,7 @@ public class TaskList extends VerticalLayout {
     }
 
     private void createNewTask(ClickEvent<Button> buttonClickEvent) {
-        taskForm.prepareForm(crmService.findAllContacts(""));
+        taskForm.prepareForm(crmService.findAllContacts(""), securityService.getAuthenticatedUser());
         taskDialog.open();
     }
 
