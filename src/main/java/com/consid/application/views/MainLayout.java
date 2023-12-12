@@ -76,9 +76,7 @@ public class MainLayout extends AppLayout {
 
     @NotNull
     private VerticalLayout getSideNav() {
-        var topNav = new SideNav("Status");
-        topNav.addItem(new SideNavItem("Status", StatusPage.class, VaadinIcon.BAR_CHART_V.create()),
-                new SideNavItem("Assignments", AssignmentList.class, VaadinIcon.CLIPBOARD_USER.create()));
+        var statusNav = getStatusNav();
 
         var taskNav = getTaskNav();
 
@@ -86,11 +84,20 @@ public class MainLayout extends AppLayout {
 
         var archiveNav = getArchiveNav();
 
-        VerticalLayout navWrapper = new VerticalLayout(topNav, dataNav, taskNav, archiveNav);
+        VerticalLayout navWrapper = new VerticalLayout(statusNav, dataNav, taskNav, archiveNav);
         navWrapper.setSpacing(true);
         navWrapper.setSizeUndefined();
 
         return navWrapper;
+    }
+
+    @NotNull
+    private SideNav getStatusNav() {
+        var statusNav = new SideNav("Status");
+        statusNav.addItem(new SideNavItem("Status", StatusPage.class, VaadinIcon.BAR_CHART_V.create()),
+                new SideNavItem("Forecast", ForecastPage.class, VaadinIcon.CLOUD.create()),
+                new SideNavItem("Assignments", AssignmentList.class, VaadinIcon.CLIPBOARD_USER.create()));
+        return statusNav;
     }
 
     @NotNull

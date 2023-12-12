@@ -35,7 +35,7 @@ public class CompletedAssignment extends AbstractEntity {
         this.consultant = assignment.getConsultant().toString();
         this.customerContact = assignment.getCustomerContact().toString();
         this.additionalContact = assignment.getAdditionalContact() != null ? assignment.getAdditionalContact().toString() : "";
-        this.considContact = assignment.getConsidContact().getFirstName();
+        this.considContact = assignment.getConsidContact() != null ? assignment.getConsidContact().getFirstName() : "";
         this.startDate = assignment.getStartDate();
         this.endDate = assignment.getEndDate();
         this.description = assignment.getDescription();
