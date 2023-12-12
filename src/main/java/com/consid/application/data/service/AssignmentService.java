@@ -3,6 +3,7 @@ package com.consid.application.data.service;
 import com.consid.application.data.entity.Assignment;
 import com.consid.application.data.entity.Consultant;
 import com.consid.application.data.repository.ConsultantRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -10,14 +11,11 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class AssignmentService {
 
     private final ConsultantRepository consultantRepository;
-
-    public AssignmentService(ConsultantRepository consultantRepository) {
-        this.consultantRepository = consultantRepository;
-    }
 
     public List<ConsultantAssignments> getAssignmentsFromDate() {
         var allConsultants = consultantRepository.findAll();
