@@ -30,9 +30,6 @@ public class UserService {
         if (user == null) {
             throw new UserException("Cannot register null user");
         }
-        if (!securityService.isAdmin()) {
-            throw new UserException("Only admin can register new users");
-        }
         if (userRepository.findByEmailIgnoreCase(user.getEmail()).isPresent()) {
             throw new UserException("User with email " + user.getEmail() + " already exists");
         }

@@ -2,6 +2,7 @@ package com.consid.application.data.service;
 
 import com.consid.application.data.entity.Role;
 import com.consid.application.data.entity.User;
+import com.consid.application.data.exceptions.UserException;
 import com.consid.application.data.repository.UserRepository;
 import com.consid.application.security.SecurityService;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,44 +60,44 @@ public class UserServiceTest {
     }
 
     @Test
-    public void whenUpdatePasswordWithNullUser_thenThrowIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+    public void whenUpdatePasswordWithNullUser_thenThrowUserException() {
+        assertThrows(UserException.class, () -> {
             userService.updatePassword(null, "newStrongPassword");
         });
     }
 
     @Test
-    public void whenRegisterUserWithExistingEmail_thenThrowIllegalArgumentException() {
+    public void whenRegisterUserWithExistingEmail_thenThrowUserException() {
         User user = new User();
         user.setEmail("test@email.com");
         when(userRepository.findByEmailIgnoreCase(anyString())).thenReturn(Optional.of(user));
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserException.class, () -> {
             userService.registerUser(user, Role.builder().name("USER").build());
         });
     }
 
     @Test
-    public void whenRegisterUserWithWeakPassword_thenThrowIllegalArgumentException() {
+    public void whenRegisterUserWithWeakPassword_thenThrowUserException() {
         User user = new User();
         user.setEmail("new@email.com");
         user.setPassword("weak");
 
         when(userRepository.findByEmailIgnoreCase(anyString())).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserException.class, () -> {
             userService.registerUser(user, Role.builder().name("USER").build());
         });
     }
 
     @Test
-    public void whenRegisterUserWithNoRole_thenThrowIllegalArgumentException() {
+    public void whenRegisterUserWithNoRole_thenThrowUserException() {
         User user = new User();
         user.setEmail("new@email.com");
 
         when(userRepository.findByEmailIgnoreCase(anyString())).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserException.class, () -> {
             userService.registerUser(user);
         });
     }
@@ -108,7 +109,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void whenUpdatePasswordForAnotherUser_thenThrowIllegalArgumentException() {
+    public void whenUpdatePasswordForAnotherUser_thenThrowUserException() {
         User user = new User();
         user.setEmail("test@email.com");
         User authenticatedUser = new User();
@@ -123,13 +124,13 @@ public class UserServiceTest {
         when(securityService.getAuthenticatedUser()).thenReturn(new org.springframework.security.core.userdetails.User(authenticatedUser.getEmail(), authenticatedUser.getPassword(), authorities));
         when(securityService.isAdmin()).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserException.class, () -> {
             userService.updatePassword(user, "newPassword");
         });
     }
 
     @Test
-    public void whenUpdatePasswordWithWeakNewPassword_thenThrowIllegalArgumentException() {
+    public void whenUpdatePasswordWithWeakNewPassword_thenThrowUserException() {
         User user = new User();
         user.setEmail("test@email.com");
         User authenticatedUser = new User();
@@ -144,7 +145,7 @@ public class UserServiceTest {
         when(securityService.getAuthenticatedUser()).thenReturn(new org.springframework.security.core.userdetails.User(authenticatedUser.getEmail(), authenticatedUser.getPassword(), authorities));
         when(securityService.isAdmin()).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserException.class, () -> {
             userService.updatePassword(user, "weak");
         });
     }
