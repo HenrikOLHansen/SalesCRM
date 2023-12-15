@@ -11,6 +11,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -130,9 +131,16 @@ public class SkillList extends HorizontalLayout {
     private void configureSkillsGrid() {
         skillsGrid.addClassNames("skill-grid");
         skillsGrid.setSizeFull();
-        skillsGrid.addColumn(Skill::getName);
+        skillsGrid.addColumn(Skill::getName).setHeader("Name");
+        skillsGrid.addComponentColumn(this::skillTypeRenderer).setHeader("Skill Type");
         skillsGrid.getColumns().forEach(col -> col.setAutoWidth(true));
         skillsGrid.asSingleSelect().addValueChangeListener(event -> editSkill(event.getValue()));
+    }
+
+    private Span skillTypeRenderer(Skill skill) {
+        Span span = new Span(skill.getSkillType().getType());
+        span.getElement().getThemeList().add("badge contrast");
+        return span;
     }
 
     private void configureSkillTypesGrid() {
